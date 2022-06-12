@@ -1,18 +1,24 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
 import { BookController } from './book.controller';
+import { BookService } from 'src/services/book/book.service';
+import { ModuleRef } from '@nestjs/core';
 
 describe('BookController', () => {
-  let controller: BookController;
+  let bookController: BookController;
+  let bookService: BookService;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    const module = await Test.createTestingModule({
       controllers: [BookController],
+      providers: [BookService],
     }).compile();
-
-    controller = module.get<BookController>(BookController);
+    bookService = module.get<BookService>(BookService);
+    bookController = module.get<BookController>(BookController);
   });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
+  describe('getAllBooks', () => {
+    it('should return an array of cats', async () => {
+      const result = ['test'];
+    });
   });
 });

@@ -4,20 +4,23 @@ import { BookService } from 'src/services/book/book.service';
 import { Response } from 'express';
 import { BookSchema } from 'src/dto/book/book.dto';
 
-import {JoiValidationPipe} from 'src/validation/book/validation.pipe'
+import { BookValidationPipe } from 'src/validation/book/validation.pipe'
 import Joi from 'joi';
+import { IBook } from 'src/interfaces/book/book.interface';
+import { UserMiddleware } from 'src/user.middleware';
 
 @Controller('book')
 export class BookController {
     constructor(private readonly bookService: BookService) { }
-
-
     @Post()
-    @UsePipes(new JoiValidationPipe(BookSchema))
+    @UsePipes(new BookValidationPipe(BookSchema))
+
     async createBook(@Res() res: Response, @Body() createBookDto: CreateBookDto) {
         try {
+           
+       
             const newBook = await this.bookService.createBook(createBookDto);
-            return res.status(HttpStatus.CREATED).send('A BOOK IS CREATED');
+            return res.status(HttpStatus.CREATED).send('BOOK CREATION SUCCESSFUL !');
         } catch (error) {
 
         }
@@ -31,9 +34,11 @@ export class BookController {
                 message: 'All students data found successfully', books,
             });
 
+
         } catch (error) {
             return res.status(error.status).json(error.res);
         }
+
     }
     @Get(':id')
     async getOneBook(@Param('id') bookid: string, @Res() res: Response) {
@@ -41,7 +46,7 @@ export class BookController {
             const book = await this.bookService.getoneBook(bookid);
             return res.status(HttpStatus.OK).json({
                 message: `${book.name} find successfully`, book,
-            }); 
+            });
         } catch (error) {
             return res.status(error.status).json(error.res);
         }
@@ -50,5 +55,5 @@ export class BookController {
 
 
 
-    
+
 }
